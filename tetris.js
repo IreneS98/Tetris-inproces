@@ -1,65 +1,69 @@
+// Inicio del canvas
+const canvas = document.querySelector('canvas');
+const contexto = canvas.getContext('2d');
 
+const anchoDeBloque = 14;
+const altoDeBloque = 30;
+const tamanyoBloque = 30;
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+canvas.width = tamanyoBloque * anchoDeBloque;
+canvas.height = tamanyoBloque * altoDeBloque;
 
-function dibujarCuadrado() {
-    ctx.fillStyle = "red";
-    ctx.fillRect(0, 0, 50, 50);
-    
+contexto.scale(tamanyoBloque, tamanyoBloque);
 
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(25, 1);
-    ctx.lineTo(25, 50);
-    ctx.stroke();
+//Cuadrado 
+const cuadrado =[
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [1,1,1,1,1,1,1,1,1,1,0,0,1,1],
+];
 
-    ctx.beginPath();
-    ctx.moveTo(0, 25);
-    ctx.lineTo(50, 25);
-    ctx.stroke();
+// Inicio del tetris game loop
 
-    ctx.beginPath();
-    ctx.moveTo(0, 50);
-    ctx.lineTo(50, 50);
-    ctx.lineTo(50, 0);
-    ctx.lineTo(0, 0);
-    ctx.lineTo(0, 50);
-    ctx.stroke();
+function update(){
+    draw();
+    window.requestAnimationFrame(update);
 }
 
+function draw(){
+    contexto.fillStyle = '#000';
+    contexto.fillRect(0, 0, canvas.width, canvas.height);
 
-function dibujarrectangulo() {
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(0, 0, 25, 100);
-
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(25, 1);
-    ctx.lineTo(25, 50);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(0, 25);
-    ctx.lineTo(25, 25);
-    ctx.moveTo(0, 50);
-    ctx.lineTo(25, 50);
-    ctx.moveTo(0, 75);
-    ctx.lineTo(25, 75);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(25, 0);
-    ctx.lineTo(25, 100);
-    ctx.lineTo(0, 100);
-    ctx.lineTo(0,0);
-    ctx.stroke();
+    cuadrado.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if(value == 1){
+                contexto.fillStyle = 'red';
+                contexto.fillRect(x, y, 1, 1);
+            }
+        });
+    });
 }
 
-dibujarCuadrado();
-//dibujarrectangulo()
-
-//--------------------------------------------
+update();
