@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="tetris.css">
     <title>Juego de Tetris</title>
 </head>
+
 <body>
-    <canvas></canvas>
+
+    <div id="reserva">
+        <h2> Guardar Pieza</h2>
+        <canvas id="reservaPieza">FORMA DE PIEZA</canvas>
+    </div>
+    <div id="canvasBoard"><canvas id="board"></canvas></div>
+    <div id="score"><h2>Puntuación:</h2><br>
+        0</div>
     <script src="tetris.js"></script>
 </body>
+
 </html>

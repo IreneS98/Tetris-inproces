@@ -1,7 +1,30 @@
 body{
-    margin: 0;
-    padding: 0;
-    display: grid;
-    place-content: center;
+    margin: 20;
+    padding: 10;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+
+#score {
+    margin: 20px;
+    display: inline-block;
+    padding: 20px;
+    background-color: rgb(219, 215, 215);
+    font-size: 15px;
+    vertical-align: top;
+}
+
+#canvasBoard{
+    display: inline-block;
+}
+
+
+#reserva {
+    margin: 20px;
+    padding: 20px;
+    background-color: rgb(219, 215, 215);
+    font-size: 15px;
+    display: inline-block;
+    vertical-align: top;
     
 }
