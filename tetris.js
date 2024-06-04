@@ -5,8 +5,8 @@ const contexto = canvas.getContext('2d');
 const canvasReserva = document.querySelector('#reservaPieza');
 const contextoReserva = canvasReserva.getContext('2d');
 
-const anchoDeBloque = 14;
-const altoDeBloque = 30;
+const anchoDeBloque = 15;
+const altoDeBloque = 22.02;
 const tamanyoBloque = 30;
 
 canvas.width = tamanyoBloque * anchoDeBloque;
@@ -82,6 +82,29 @@ let piezaActual = {
     "shape": obtenerPiezaRandom() // Llama a la función para obtener una pieza aleatoria
 };
 
+// Esta función reinicia el juego.
+function resetGame(){
+    // Reinicia la puntuación del jugador.
+    puntuacion = 0;
+    // Establece la posición inicial de la pieza en el tablero.
+    piezaActual = {
+        "position": {
+            x: 6, // Coordenada x inicial de la pieza
+            y: 0  // Coordenada y inicial de la pieza
+        },
+        // Obtiene una pieza aleatoria y la asigna como pieza actual.
+        "shape": obtenerPiezaRandom() // Llama a la función para obtener una pieza aleatoria
+    };
+    // Resetea la pieza guardada a null.
+    piezaGuardada = null;
+    // Dibuja la reserva de piezas en la interfaz.
+    drawReserva() 
+    // Establece todas las celdas del tablero a 0 (vacías).
+    board.forEach(fila => fila.fill(0));
+    // Dibuja el estado actual del tablero.
+    draw();
+}
+
 // Define una función asincrónica llamada 'update'
 async function update() {
     draw(); // Llama a la función 'draw' para dibujar el estado actual del juego
@@ -102,12 +125,14 @@ async function update() {
         // Verifica si la nueva pieza colisiona en la parte superior del tablero, lo que significa que el juego ha terminado
         if (colisionCurrent()) {
             alert("Game Over"); // Muestra un mensaje de "Game Over"
-            return; // Termina la función update, deteniendo el juego
+            resetGame();
+             // Termina la función update, deteniendo el juego
         }
     }
 
     window.requestAnimationFrame(update); // Solicita al navegador que ejecute 'update' de nuevo en el próximo ciclo de animación
 }
+
 
 //Funcion para el canvasReserva
 function drawReserva() {
@@ -128,10 +153,13 @@ function drawReserva() {
         });
     }
 }
-// Función para dibujar el estado actual del juego en el canvas
+
+
+// Modifica la función draw para que dibuje la cuadrícula antes de dibujar el tablero y las piezas
 function draw() {
     contexto.fillStyle = '#000'; // Establece el color de relleno a negro
     contexto.fillRect(0, 0, canvas.width, canvas.height); // Rellena el canvas con el color de fondo
+
 
     // Dibuja el tablero
     board.forEach((row, y) => {
@@ -152,7 +180,6 @@ function draw() {
             }
         });
     });
-
 }
 
 // Función para eliminar la fila si está completa
@@ -166,7 +193,7 @@ function limpiarLineasCompletas() {
             const score = document.getElementById("score")
             puntuacion += 100;
             score.innerText = `Puntuación: ${puntuacion}`;
-            console.log("puntuacion", puntuacion)
+            console.log(`puntuacion: ${puntuacion}`)
         }
         else y--;
     }
