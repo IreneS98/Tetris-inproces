@@ -1,10 +1,11 @@
-// Inicio del canvas
+// Inicio del canvas. Hemos creado un canvas como tablero donde jugar y un segundo para tener la pieza de reserva
 const canvas = document.querySelector('#board');
 const contexto = canvas.getContext('2d');
 
 const canvasReserva = document.querySelector('#reservaPieza');
 const contextoReserva = canvasReserva.getContext('2d');
-
+// Definición del tablero (board): Creamos una matriz bidimensional para representar el tablero del juego
+// altoDeBloque es el número de filas y anchoDeBloque es el número de columnas. Los bloques seran 30x30
 const anchoDeBloque = 15;
 const altoDeBloque = 22.02;
 const tamanyoBloque = 30;
@@ -17,9 +18,7 @@ canvasReserva.height = tamanyoBloque * 5;
 contexto.scale(tamanyoBloque, tamanyoBloque);
 contextoReserva.scale(tamanyoBloque, tamanyoBloque);
 
-// Definición del tablero (board)
-// Crea una matriz bidimensional para representar el tablero del juego
-// altoDeBloque es el número de filas y anchoDeBloque es el número de columnas
+
 const board = Array.from({ length: altoDeBloque }, () => Array(anchoDeBloque).fill(0));
 //const scoreElement = document.getElementById('score'); // Asume que tienes un elemento para mostrar la puntuación
 
@@ -73,7 +72,7 @@ function obtenerPiezaRandom() {
     return piezas[nombrePieza]; // Retorna la pieza correspondiente al nombre seleccionado
 }
 
-// Define la variable 'piezaActual' usando 'let' para que su alcance esté limitado al bloque donde se declara
+// Define la variable 'piezaActual' usando 'let' 
 let piezaActual = {
     "position": {
         x: 6, // Coordenada x inicial de la pieza
@@ -81,57 +80,6 @@ let piezaActual = {
     },
     "shape": obtenerPiezaRandom() // Llama a la función para obtener una pieza aleatoria
 };
-
-// Esta función reinicia el juego.
-function resetGame(){
-    // Reinicia la puntuación del jugador.
-    puntuacion = 0;
-    // Establece la posición inicial de la pieza en el tablero.
-    piezaActual = {
-        "position": {
-            x: 6, // Coordenada x inicial de la pieza
-            y: 0  // Coordenada y inicial de la pieza
-        },
-        // Obtiene una pieza aleatoria y la asigna como pieza actual.
-        "shape": obtenerPiezaRandom() // Llama a la función para obtener una pieza aleatoria
-    };
-    // Resetea la pieza guardada a null.
-    piezaGuardada = null;
-    // Dibuja la reserva de piezas en la interfaz.
-    drawReserva() 
-    // Establece todas las celdas del tablero a 0 (vacías).
-    board.forEach(fila => fila.fill(0));
-    // Dibuja el estado actual del tablero.
-    draw();
-}
-
-// Define una función asincrónica llamada 'update'
-async function update() {
-    draw(); // Llama a la función 'draw' para dibujar el estado actual del juego
-
-    await sleep(1000); // Espera 1000 milisegundos (1 segundo) antes de continuar con la siguiente instrucción
-
-    piezaActual.position.y++; // Incrementa la coordenada y de la pieza actual en 1, moviendo la pieza hacia abajo
-
-    if (colisionCurrent()) { // Comprueba si la pieza actual ha colisionado con algo
-        piezaActual.position.y--; // Si hay colisión, revertir la última acción moviendo la pieza hacia arriba
-        fijarPieza(); // Fija la pieza en su posición actual en el tablero
-        limpiarLineasCompletas(); // Limpia las líneas completas del tablero
-        piezaActual = { // Genera una nueva pieza en la posición inicial
-            "position": { x: 6, y: 0 },
-            "shape": obtenerPiezaRandom()
-        };
-
-        // Verifica si la nueva pieza colisiona en la parte superior del tablero, lo que significa que el juego ha terminado
-        if (colisionCurrent()) {
-            alert("Game Over"); // Muestra un mensaje de "Game Over"
-            resetGame();
-             // Termina la función update, deteniendo el juego
-        }
-    }
-
-    window.requestAnimationFrame(update); // Solicita al navegador que ejecute 'update' de nuevo en el próximo ciclo de animación
-}
 
 
 //Funcion para el canvasReserva
@@ -209,39 +157,6 @@ function fijarPieza() {
         });
     });
 }
-// Control de eventos del teclado para mover y rotar la pieza
-document.addEventListener('keydown', (event) => {
-    if (event.code === 'ArrowLeft') {
-        piezaActual.position.x--; // Mueve la pieza a la izquierda
-        if (colisionCurrent()) { // Si hay colisión, revertir el movimiento
-            piezaActual.position.x++;
-        }
-        draw(); // Redibuja el estado del juego
-    } else if (event.code === 'ArrowRight') {
-        piezaActual.position.x++; // Mueve la pieza a la derecha
-        if (colisionCurrent()) { // Si hay colisión, revertir el movimiento
-            piezaActual.position.x--;
-        }
-        draw(); // Redibuja el estado del juego
-    } else if (event.code === 'ArrowDown') {
-        piezaActual.position.y++; // Mueve la pieza hacia abajo
-        if (colisionCurrent()) { // Si hay colisión, revertir el movimiento
-            piezaActual.position.y--;
-        }
-        draw(); // Redibuja el estado del juego
-
-    } else if (event.code === "Space") {
-        do {
-            piezaActual.position.y++ //Mueve la pieza hasta abajo
-        } while (!colisionCurrent())
-        piezaActual.position.y--; //Una vez colisiona, se deja colocado encima
-        draw(); // Redibuja el estado del juego
-
-    } else if (event.code === 'ArrowUp') {
-        rotate(); // Rota la pieza
-        draw(); // Redibuja el estado del juego
-    }
-});
 
 // Función para rotar la pieza
 function rotate() {
@@ -304,6 +219,93 @@ function guardarPieza(event) {
     draw();
     drawReserva();
 }
+
+// Control de eventos del teclado para mover y rotar la pieza
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'ArrowLeft') {
+        piezaActual.position.x--; // Mueve la pieza a la izquierda
+        if (colisionCurrent()) { // Si hay colisión, revertir el movimiento
+            piezaActual.position.x++;
+        }
+        draw(); // Redibuja el estado del juego
+    } else if (event.code === 'ArrowRight') {
+        piezaActual.position.x++; // Mueve la pieza a la derecha
+        if (colisionCurrent()) { // Si hay colisión, revertir el movimiento
+            piezaActual.position.x--;
+        }
+        draw(); // Redibuja el estado del juego
+    } else if (event.code === 'ArrowDown') {
+        piezaActual.position.y++; // Mueve la pieza hacia abajo
+        if (colisionCurrent()) { // Si hay colisión, revertir el movimiento
+            piezaActual.position.y--;
+        }
+        draw(); // Redibuja el estado del juego
+
+    } else if (event.code === "Space") {
+        do {
+            piezaActual.position.y++ //Mueve la pieza hasta abajo
+        } while (!colisionCurrent())
+        piezaActual.position.y--; //Una vez colisiona, se deja colocado encima
+        draw(); // Redibuja el estado del juego
+
+    } else if (event.code === 'ArrowUp') {
+        rotate(); // Rota la pieza
+        draw(); // Redibuja el estado del juego
+    }
+});
+
+// Esta función reinicia el juego.
+function resetGame(){
+    // Reinicia la puntuación del jugador.
+    puntuacion = 0;
+    // Establece la posición inicial de la pieza en el tablero.
+    piezaActual = {
+        "position": {
+            x: 6, // Coordenada x inicial de la pieza
+            y: 0  // Coordenada y inicial de la pieza
+        },
+        // Obtiene una pieza aleatoria y la asigna como pieza actual.
+        "shape": obtenerPiezaRandom() // Llama a la función para obtener una pieza aleatoria
+    };
+    // Resetea la pieza guardada a null.
+    piezaGuardada = null;
+    // Dibuja la reserva de piezas en la interfaz.
+    drawReserva() 
+    // Establece todas las celdas del tablero a 0 (vacías).
+    board.forEach(fila => fila.fill(0));
+    // Dibuja el estado actual del tablero.
+    draw();
+}
+
+// Define una función asincrónica llamada 'update'
+async function update() {
+    draw(); // Llama a la función 'draw' para dibujar el estado actual del juego
+
+    await sleep(1000); // Espera 1000 milisegundos (1 segundo) antes de continuar con la siguiente instrucción
+
+    piezaActual.position.y++; // Incrementa la coordenada y de la pieza actual en 1, moviendo la pieza hacia abajo
+
+    if (colisionCurrent()) { // Comprueba si la pieza actual ha colisionado con algo
+        piezaActual.position.y--; // Si hay colisión, revertir la última acción moviendo la pieza hacia arriba
+        fijarPieza(); // Fija la pieza en su posición actual en el tablero
+        limpiarLineasCompletas(); // Limpia las líneas completas del tablero
+        piezaActual = { // Genera una nueva pieza en la posición inicial
+            "position": { x: 6, y: 0 },
+            "shape": obtenerPiezaRandom()
+        };
+
+        // Verifica si la nueva pieza colisiona en la parte superior del tablero, lo que significa que el juego ha terminado
+        if (colisionCurrent()) {
+            alert("Game Over"); // Muestra un mensaje de "Game Over"
+            resetGame();
+             // Termina la función update, deteniendo el juego
+        }
+    }
+
+    window.requestAnimationFrame(update); // Solicita al navegador que ejecute 'update' de nuevo en el próximo ciclo de animación
+}
+
+
 
 document.getElementById('reserva').addEventListener('click', guardarPieza);
 

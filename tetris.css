@@ -41,13 +41,9 @@ body {
     border: 1px solid black;
     box-sizing: border-box;
     width: 18vw;
-    max-width: 250px;
+    max-width: 180px;
     text-align: center;
     margin-left: 8px;
-}
-
-#reserva:hover {
-    cursor: url("/img/icons8-hand-cursor-38.png"), auto;
 }
 
 #score h2, #reserva h2 {
